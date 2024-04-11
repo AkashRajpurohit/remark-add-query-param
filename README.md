@@ -23,8 +23,6 @@
     <a href="https://github.com/AkashRajpurohit/remark-add-query-param/issues/new?template=bug_report.yml">Bug report</a>
     ·
     <a href="https://github.com/AkashRajpurohit/remark-add-query-param/issues/new?template=feature_request.yml">Feature request</a>
-    ·
-    <a href="https://akashrajpurohit.github.io/remark-add-query-param">Read Docs</a>
   </p>
 </p>
 <br />
