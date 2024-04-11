@@ -22,14 +22,11 @@ export default function addQueryParam({
 	externalLinks = true,
 	internalLinks = true,
 }: Options) {
-	console.log({ queryParam });
 	if (!queryParam) {
 		throw new Error('[remark-add-query-param] queryParam is required');
 	}
 
 	const [queryParamKey, queryParamValue] = queryParam.split('=');
-
-	console.log({ queryParamKey, queryParamValue });
 
 	if (!queryParamKey || !queryParamValue) {
 		throw new Error(
@@ -39,7 +36,6 @@ export default function addQueryParam({
 
 	return (tree: Node) => {
 		visit(tree, 'link', (node: Link) => {
-			console.log(node.url);
 			if (node.url?.startsWith('#')) {
 				return;
 			}
@@ -52,8 +48,6 @@ export default function addQueryParam({
 			if (node.url) {
 				const isExternalUrl = node.url.startsWith('http');
 				const isInternalUrl = node.url.startsWith('/');
-
-				console.log({ isExternalUrl, isInternalUrl });
 
 				// If the URL is external and externalLinks is false, skip it
 				if (!externalLinks && isExternalUrl) {
@@ -69,8 +63,6 @@ export default function addQueryParam({
 				if (isExternalUrl) {
 					const parsedUrl = parse(node.url, true);
 
-					console.log({ parsedUrl });
-
 					// If the URL already has a query parameter which matches the
 					// same query parameter key, skip it
 					if (parsedUrl.query && parsedUrl.query[queryParamKey] !== undefined) {
@@ -80,8 +72,6 @@ export default function addQueryParam({
 					// Append the query parameter to the URL
 					const newUrl = new URL(node.url);
 					newUrl.searchParams.set(queryParamKey, queryParamValue);
-
-					console.log({ newUrl });
 
 					node.url = newUrl.toString();
 				}
