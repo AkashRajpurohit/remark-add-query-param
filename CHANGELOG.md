@@ -1,5 +1,13 @@
 # remark-add-query-param
 
+## 1.1.1
+
+### Patch Changes
+
+- [`712c64e`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/712c64e6f7c70a7a711380898d4a336d5335cd8f) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - docs: :memo: instruction for nextjs added in readme
+
+- [`6826557`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/6826557edc0b0738df903684136193545be57f86) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - docs: :memo: instruction for Astro added in readme
+
 ## 1.1.0
 
 ### Minor Changes
