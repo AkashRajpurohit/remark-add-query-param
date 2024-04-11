@@ -95,6 +95,38 @@ export default defineConfig({
 });
 ```
 
+### Integration with Next.js
+
+If you are using Next.js, you can use this plugin in your `next.config.js` file like this:
+
+```javascript
+import addQueryParam from 'remark-add-query-param';
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+};
+
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [
+      [
+        addQueryParam,
+        {
+          queryParam: 'utm_source=remark-add-query-param',
+          externalLinks: true,
+          internalLinks: true,
+        },
+      ],
+    ],
+  },
+});
+
+export default withMDX(nextConfig);
+```
+
 ## Configurations ⚙️
 
 You can pass the following options to the plugin:

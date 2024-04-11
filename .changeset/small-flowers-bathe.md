@@ -2,4 +2,4 @@
 "remark-add-query-param": patch
 ---
 
-docs: :memo: readme updated with usage instructions
+docs: :memo: instruction for Astro added in readme
