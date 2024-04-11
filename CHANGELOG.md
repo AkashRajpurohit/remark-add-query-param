@@ -1,5 +1,11 @@
 # remark-add-query-param
 
+## 1.1.0
+
+### Minor Changes
+
+- [`934c366`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/934c366bf4aad13ebd11b9fb6bb36f1833120fe6) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - fix: :bug: add handling for hash in internal links
+
 ## 1.0.0
 
 ### Major Changes
