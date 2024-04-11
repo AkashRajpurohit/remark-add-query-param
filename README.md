@@ -5,15 +5,15 @@
   <a href="https://github.com/AkashRajpurohit/remark-add-query-param/actions/workflows/release.yml">
     <img alt="Build states" src="https://github.com/AkashRajpurohit/remark-add-query-param/actions/workflows/release.yml/badge.svg?branch=main">
   </a>
-  <a href="https://www.npmjs.com/package/@akashrajpurohit/remark-add-query-param">
-    <img alt="npm latest version" src="https://img.shields.io/npm/v/@akashrajpurohit/remark-add-query-param/latest.svg">
+  <a href="https://www.npmjs.com/package/remark-add-query-param">
+    <img alt="npm latest version" src="https://img.shields.io/npm/v/remark-add-query-param/latest.svg">
   </a>
-  <a href="https://www.npmjs.com/package/@akashrajpurohit/remark-add-query-param">
-    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/@akashrajpurohit/remark-add-query-param">
+  <a href="https://www.npmjs.com/package/remark-add-query-param">
+    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/remark-add-query-param">
   </a>
   <img alt="Visitors count" src="https://visitor-badge.laobi.icu/badge?page_id=@akashrajpurohit~remark-add-query-param.visitor-badge&style=flat-square&color=0088cc">
-  <a href="https://www.npmjs.com/package/@akashrajpurohit/remark-add-query-param">
-    <img alt="NPM license" src="https://img.shields.io/npm/l/@akashrajpurohit/remark-add-query-param">
+  <a href="https://www.npmjs.com/package/remark-add-query-param">
+    <img alt="NPM license" src="https://img.shields.io/npm/l/remark-add-query-param">
   </a>
   <a href="https://twitter.com/akashwhocodes">
     <img alt="follow on twitter" src="https://img.shields.io/twitter/follow/akashwhocodes.svg?style=social&label=@akashwhocodes">
@@ -32,11 +32,32 @@
 
 ## Usage 💻
 
-TBD
+First you need to install the package using npm or yarn or pnpm. 
+
+```bash
+npm install remark-add-query-param
+```
+
+Then you can use it in your remark pipeline like this:
+
+```javascript
+const remark = require('remark');
+const addQueryParam = require('remark-add-query-param');
+
+const processor = remark().use(addQueryParam, {
+  queryParam: 'utm_source=remark-add-query-param',
+});
+
+processor.process('This is a [link](https://example.com)');
+```
 
 ## Configurations ⚙️
 
-TBD
+You can pass the following options to the plugin:
+
+- `queryParam`: The query parameter to add to the links. This is required and should be a valid query parameter string i.e key=value.
+- `externalLinks`: If set to `false`, the plugin will not add the query parameter to external links. Default is `true` i.e it will add the query parameter to all external links.
+- `internalLinks`: If set to `false`, the plugin will not add the query parameter to internal links. Default is `true` i.e it will add the query parameter to all internal links.
 
 ## Contributing 🫱🏻‍🫲🏼
 
