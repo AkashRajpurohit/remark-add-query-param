@@ -77,11 +77,26 @@ export default function addQueryParam({
 
 					// If there are already some query parameters in the URL
 					// Then append the query parameter to the URL
-					// Otherwise add the query parameter to the URL
 					if (node.url.includes('?')) {
-						node.url = `${node.url}&${queryParamKey}=${queryParamValue}`;
+						if (node.url.includes('#')) {
+							// If the URL includes a hash, then add the query parameter before the hash
+							node.url = `${
+								node.url.split('#')[0]
+							}&${queryParamKey}=${queryParamValue}#${node.url.split('#')[1]}`;
+						} else {
+							// Otherwise just append the query parameter to the URL
+							node.url = `${node.url}&${queryParamKey}=${queryParamValue}`;
+						}
 					} else {
-						node.url = `${node.url}?${queryParamKey}=${queryParamValue}`;
+						if (node.url.includes('#')) {
+							// If the URL includes a hash, then add the query parameter before the hash
+							node.url = `${
+								node.url.split('#')[0]
+							}?${queryParamKey}=${queryParamValue}#${node.url.split('#')[1]}`;
+						} else {
+							// Otherwise just add the query parameter to the URL
+							node.url = `${node.url}?${queryParamKey}=${queryParamValue}`;
+						}
 					}
 				}
 			}

@@ -74,13 +74,23 @@ describe('addQueryParam', () => {
 			expect(String(result).trim().replace(/\\/g, '')).toEqual('[Home](/)');
 		});
 
-		it('should not add query parameter to internal link with hash', async () => {
+		it('should not add query parameter to internal link with just a hash', async () => {
 			const result = await remark()
 				.use(addQueryParam, { queryParam })
 				.process('[Home](#section)');
 
 			expect(String(result).trim().replace(/\\/g, '')).toEqual(
 				'[Home](#section)',
+			);
+		});
+
+		it('should add query parameter to internal link with path and hash', async () => {
+			const result = await remark()
+				.use(addQueryParam, { queryParam })
+				.process('[Home](/blog/my-blog/#section)');
+
+			expect(String(result).trim().replace(/\\/g, '')).toEqual(
+				`[Home](/blog/my-blog/?${queryParam}#section)`,
 			);
 		});
 
@@ -111,6 +121,16 @@ describe('addQueryParam', () => {
 
 			expect(String(result).trim().replace(/\\/g, '')).toEqual(
 				`[Home](/?utm_source=oldwebsite.com&${queryParam})`,
+			);
+		});
+
+		it('should add query parameter to internal link with different ref and hash', async () => {
+			const result = await remark()
+				.use(addQueryParam, { queryParam })
+				.process('[Home](/?utm_source=oldwebsite.com#section)');
+
+			expect(String(result).trim().replace(/\\/g, '')).toEqual(
+				`[Home](/?utm_source=oldwebsite.com&${queryParam}#section)`,
 			);
 		});
 	});
