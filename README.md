@@ -55,14 +55,44 @@ npm install remark-add-query-param
 Then you can use it in your remark pipeline like this:
 
 ```javascript
-const remark = require('remark');
-const addQueryParam = require('remark-add-query-param');
+import { remark } from 'remark';
+import addQueryParam from 'remark-add-query-param';
 
 const processor = remark().use(addQueryParam, {
   queryParam: 'utm_source=remark-add-query-param',
+  externalLinks: true,
+  internalLinks: true,
 });
 
-processor.process('This is a [link](https://example.com)'); // This is a [link](https://example.com?utm_source=remark-add-query-param)
+processor.process('This is a [link](https://example.com)').then((file) => {
+  console.log(String(file));
+});
+```
+
+### Integration with Astro
+
+If you are using Astro, you can use this plugin in your `astro.config.mjs` file like this:
+
+```javascript
+import { defineConfig } from 'astro/config';
+import addQueryParam from 'remark-add-query-param';
+
+export default defineConfig({
+  markdown: {
+    remark: {
+      plugins: [
+        [
+          addQueryParam,
+          {
+            queryParam: 'utm_source=remark-add-query-param',
+            externalLinks: true,
+            internalLinks: true,
+          },
+        ],
+      ],
+    },
+  }
+});
 ```
 
 ## Configurations ⚙️
