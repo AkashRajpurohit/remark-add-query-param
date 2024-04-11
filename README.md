@@ -30,6 +30,22 @@
 <br />
 <hr />
 
+## Why? 🤔
+
+I use markdown to write my blog posts and I wanted to add query parameters to all the links in my blog posts. I couldn't find any plugin that does this so I decided to write one myself. This plugin adds query parameters to all the links in the markdown file.
+
+So if you have a markdown file like this:
+
+```markdown
+This is a [link](https://example.com)
+```
+
+And you use this plugin with the query parameter `utm_source=remark-add-query-param`, the output will be:
+
+```markdown
+This is a [link](https://example.com?utm_source=remark-add-query-param)
+```
+
 ## Usage 💻
 
 First you need to install the package using npm or yarn or pnpm. 
@@ -48,7 +64,7 @@ const processor = remark().use(addQueryParam, {
   queryParam: 'utm_source=remark-add-query-param',
 });
 
-processor.process('This is a [link](https://example.com)');
+processor.process('This is a [link](https://example.com)'); // This is a [link](https://example.com?utm_source=remark-add-query-param)
 ```
 
 ## Configurations ⚙️
