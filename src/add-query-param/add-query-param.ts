@@ -1,6 +1,4 @@
 import { visit } from 'unist-util-visit';
-import { toString as mdToString } from 'mdast-util-to-string';
-import { parse } from 'node:url';
 import type { Node } from 'unist';
 import type { Link } from 'mdast';
 
@@ -40,11 +38,6 @@ export default function addQueryParam({
 				return;
 			}
 
-			const linkText = mdToString(node);
-			if (linkText.startsWith('#')) {
-				return;
-			}
-
 			if (node.url) {
 				const isExternalUrl = node.url.startsWith('http');
 				const isInternalUrl = node.url.startsWith('/');
@@ -61,19 +54,17 @@ export default function addQueryParam({
 
 				// Handling for external links
 				if (isExternalUrl) {
-					const parsedUrl = parse(node.url, true);
+					const parsedUrl = new URL(node.url);
 
 					// If the URL already has a query parameter which matches the
 					// same query parameter key, skip it
-					if (parsedUrl.query && parsedUrl.query[queryParamKey] !== undefined) {
+					if (parsedUrl.searchParams.get(queryParamKey)) {
 						return;
 					}
 
-					// Append the query parameter to the URL
-					const newUrl = new URL(node.url);
-					newUrl.searchParams.set(queryParamKey, queryParamValue);
+					parsedUrl.searchParams.set(queryParamKey, queryParamValue);
 
-					node.url = newUrl.toString();
+					node.url = parsedUrl.toString();
 				}
 
 				if (isInternalUrl) {
