@@ -67,6 +67,7 @@ export default function addQueryParam({
 					node.url = parsedUrl.toString();
 				}
 
+				// Handling for internal links
 				if (isInternalUrl) {
 					// If the internal URL has a query parameter which matches the
 					// same query parameter key, skip it
