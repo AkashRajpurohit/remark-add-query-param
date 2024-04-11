@@ -42,7 +42,6 @@
   ],
   "scripts": {
     "build": "NODE_ENV=production tsup",
-    "build:docs": "typedoc --out docs ./src/index.ts",
     "dev": "tsup --watch",
     "format": "biome check --apply ./src",
     "test": "vitest run",
@@ -63,7 +62,6 @@
     "@vitest/coverage-v8": "^1.4.0",
     "remark": "^15.0.1",
     "tsup": "^8.0.2",
-    "typedoc": "^0.25.12",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },
