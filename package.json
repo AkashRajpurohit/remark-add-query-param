@@ -1,22 +1,24 @@
 {
-  "name": "@akashrajpurohit/ts-npm-template",
-  "version": "2.1.0",
-  "description": "A project template to bootstrap NPM package with Typescript",
+  "name": "remark-add-query-param",
+  "version": "0.0.1",
+  "description": "A remark plugin to add query parameters to links",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AkashRajpurohit/ts-npm-template.git"
+    "url": "https://github.com/AkashRajpurohit/remark-add-query-param.git"
   },
-  "homepage": "https://github.com/AkashRajpurohit/ts-npm-template",
-  "bugs": "https://github.com/AkashRajpurohit/ts-npm-template/issues",
+  "homepage": "https://github.com/AkashRajpurohit/remark-add-query-param",
+  "bugs": "https://github.com/AkashRajpurohit/remark-add-query-param/issues",
   "author": {
     "name": "AkashRajpurohit",
     "email": "me@akashrajpurohit.com",
     "url": "https://akashrajpurohit.com"
   },
   "keywords": [
-    "typescript-template",
-    "npm-boilerplate",
-    "changesets-boilerplate"
+    "remark",
+    "remark-plugin",
+    "query-params",
+    "query-parameters",
+    "query-string"
   ],
   "license": "MIT",
   "main": "./dist/index.js",

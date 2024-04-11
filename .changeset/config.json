@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "AkashRajpurohit/ts-npm-template"
+      "repo": "AkashRajpurohit/remark-add-query-param"
     }
   ],
   "commit": false,
