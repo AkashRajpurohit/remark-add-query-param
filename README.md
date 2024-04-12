@@ -12,6 +12,9 @@
     <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/remark-add-query-param">
   </a>
   <img alt="Visitors count" src="https://visitor-badge.laobi.icu/badge?page_id=@akashrajpurohit~remark-add-query-param.visitor-badge&style=flat-square&color=0088cc">
+  <a href="https://github.com/AkashRajpurohit/remark-add-query-param/actions">
+    <img alt="Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/AkashRajpurohit/aa48c0038fbf37218a45f01d5f1467a3/raw/remark-add-query-param.json">
+  </a>
   <a href="https://www.npmjs.com/package/remark-add-query-param">
     <img alt="NPM license" src="https://img.shields.io/npm/l/remark-add-query-param">
   </a>

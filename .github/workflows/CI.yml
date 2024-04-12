@@ -37,6 +37,22 @@ jobs:
         if: always() # Also generate the report if tests are failing
         uses: davelosert/vitest-coverage-report-action@v2
 
+      - name: Get Coverage for badge 🔢
+        run: |
+          COVERAGE="$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')"
+          echo "COVERAGE=$(echo ${COVERAGE})" >> $GITHUB_ENV
+
+      - name: Create coverage badge ✍🏽
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: aa48c0038fbf37218a45f01d5f1467a3
+          filename: remark-add-query-param.json
+          label: Code Coverage
+          message: ${{ env.COVERAGE }}
+          color: green
+          namedLogo: vitest
+
       - name: Upload Test Results ⏫
         uses: actions/upload-artifact@v4
         with:
