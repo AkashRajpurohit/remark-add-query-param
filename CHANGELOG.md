@@ -1,5 +1,17 @@
 # remark-add-query-param
 
+## 1.1.2
+
+### Patch Changes
+
+- [`01f0798`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/01f0798911433cdd9a43670082d896bdbaf4980b) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :wrench: exclude few files/folders from coverage
+
+- [`a4cf4f2`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/a4cf4f2bdf0e66fa6c1f0c35aeb9560bb5f11dc9) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - build(deps): :arrow_up: vitest version bumped up
+
+- [`961aac8`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/961aac8843b548d7f61f027760fc59961c177078) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :sparkles: coverage badge added
+
+- [`222f99b`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/222f99bd86ca6d6e0d2462f237a4b1c56e94123c) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - docs: :memo: readme why section updated
+
 ## 1.1.1
 
 ### Patch Changes
