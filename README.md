@@ -33,7 +33,7 @@
 
 ## Why? 🤔
 
-I use Markdown to write content on [my website](https://akashrajpurohit.com/?ref=remark-add-query-param-readme). I wanted to add query parameters to all the links in my markdown files so that I can get insights into the traffic sources. I couldn't find any plugin that does this, so I created one.
+I use Markdown to write content on [my website](https://akashrajpurohit.com/?ref=remark-add-query-param-readme). I wanted to add query parameters to all the links in blog posts so that I can get insights into the traffic sources as well as help other people who are reading my blog posts to know where the link is coming from. I couldn't find any existing plugin that does this, so I created one.
 
 So if you have a markdown file like this:
 
