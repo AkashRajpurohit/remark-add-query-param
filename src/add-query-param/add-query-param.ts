@@ -87,32 +87,22 @@ export default function addQueryParam({
 							continue;
 						}
 
+						// If the URL already has some query parameters, then add the query parameter
+						// with the correct delimiter
+						const delimiter = node.url.includes('?') ? '&' : '?';
+
 						// If there are already some query parameters in the URL
 						// Then append the query parameter to the URL
-						if (node.url.includes('?')) {
-							if (node.url.includes('#')) {
-								// If the URL includes a hash, then add the query parameter before the hash
-								node.url = `${
-									node.url.split('#')[0]
-								}&${queryParamKey}=${queryParamValue}#${
-									node.url.split('#')[1]
-								}`;
-							} else {
-								// Otherwise just append the query parameter to the URL
-								node.url = `${node.url}&${queryParamKey}=${queryParamValue}`;
-							}
+						if (node.url.includes('#')) {
+							// If the URL includes a hash, then add the query parameter before the hash
+							node.url = `${
+								node.url.split('#')[0]
+							}${delimiter}${queryParamKey}=${queryParamValue}#${
+								node.url.split('#')[1]
+							}`;
 						} else {
-							if (node.url.includes('#')) {
-								// If the URL includes a hash, then add the query parameter before the hash
-								node.url = `${
-									node.url.split('#')[0]
-								}?${queryParamKey}=${queryParamValue}#${
-									node.url.split('#')[1]
-								}`;
-							} else {
-								// Otherwise just add the query parameter to the URL
-								node.url = `${node.url}?${queryParamKey}=${queryParamValue}`;
-							}
+							// Otherwise just add the query parameter to the URL
+							node.url = `${node.url}${delimiter}${queryParamKey}=${queryParamValue}`;
 						}
 					}
 				}
