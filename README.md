@@ -68,7 +68,7 @@ const processor = remark().use(addQueryParam, {
 });
 
 processor.process('This is a [link](https://example.com)').then((file) => {
-  console.log(String(file));
+  console.log(String(file)); // This is a [link](https://example.com?utm_source=remark-add-query-param)
 });
 ```
 
@@ -85,7 +85,7 @@ const processor = remark().use(addQueryParam, {
 });
 
 processor.process('This is a [link](https://example.com)').then((file) => {
-  console.log(String(file));
+  console.log(String(file)); // This is a [link](https://example.com?utm_source=remark-add-query-param&utm_medium=markdown)
 });
 ```
 
@@ -170,9 +170,11 @@ export default withMDX(nextConfig);
 
 You can pass the following options to the plugin:
 
-- **queryParam**: The query parameter to add to the links. This is required and should be a valid query parameter string i.e `key=value`.
-- **externalLinks**: If set to `false`, the plugin will not add the query parameter to external links. Default is `true` i.e it will add the query parameter to all external links.
-- **internalLinks**: If set to `false`, the plugin will not add the query parameter to internal links. Default is `true` i.e it will add the query parameter to all internal links.
+| Option            | Type                           | Description                                                                                                                                                    |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **queryParam**    | `QueryParam` or `QueryParam[]` | The query parameter to add to the links. This is required and should be a valid query parameter string i.e `key=value`.                                        |
+| **externalLinks** | `boolean`                      | If set to `false`, the plugin will not add the query parameter to external links. Default is `true` i.e it will add the query parameter to all external links. |
+| **internalLinks** | `boolean`                      | If set to `false`, the plugin will not add the query parameter to internal links. Default is `true` i.e it will add the query parameter to all internal links. |
 
 ## Contributing 🫱🏻‍🫲🏼
 
