@@ -1,5 +1,21 @@
 # remark-add-query-param
 
+## 1.2.0
+
+### Minor Changes
+
+- [`e61eb42`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/e61eb423a8e1a88e1e4d3ab6e6474d4c51d51537) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :sparkles: support for multiple query parameters added
+
+### Patch Changes
+
+- [`9dbe3b3`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/9dbe3b3f79f987e02ec93990f197926561c68b06) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - chore: :truck: simplify the logic for internal links
+
+- [`878b767`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/878b767a4c0769ee17d194717fcc7d57c3b8eab7) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - chore: :sparkles: add QueryParam explicit type
+
+- [`80c9e83`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/80c9e83688aaa37c62f52524bb6c7c30a5abe856) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - docs: :memo: readme updated
+
+- [`7b4ecc8`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/7b4ecc89309b81008486e49b945000c65532014e) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - docs: :memo: readme updated with new instructions
+
 ## 1.1.2
 
 ### Patch Changes
