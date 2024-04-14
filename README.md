@@ -72,6 +72,42 @@ processor.process('This is a [link](https://example.com)').then((file) => {
 });
 ```
 
+The plugin also support using multiple query parameters like this:
+
+```javascript
+import { remark } from 'remark';
+import addQueryParam from 'remark-add-query-param';
+
+const processor = remark().use(addQueryParam, {
+  queryParam: ['utm_source=remark-add-query-param', 'utm_medium=markdown'],
+  externalLinks: true,
+  internalLinks: true,
+});
+
+processor.process('This is a [link](https://example.com)').then((file) => {
+  console.log(String(file));
+});
+```
+
+To ensure the typescript is happy, you can import the types from the package like this:
+
+```typescript
+import type { QueryParam, RemarkAddQueryParamOptions } from 'remark-add-query-param';
+
+const options: RemarkAddQueryParamOptions = {
+  queryParam: 'utm_source=remark-add-query-param' as QueryParam,
+  externalLinks: true,
+  internalLinks: true,
+};
+
+// Or for multiple query parameters
+const options: RemarkAddQueryParamOptions = {
+  queryParam: ['utm_source=remark-add-query-param', 'utm_medium=markdown'] as QueryParam[],
+  externalLinks: true,
+  internalLinks: true,
+};
+```
+
 ### Integration with Astro
 
 If you are using Astro, you can use this plugin in your `astro.config.mjs` file like this:
