@@ -2,10 +2,12 @@ import { visit } from 'unist-util-visit';
 import type { Node } from 'unist';
 import type { Link } from 'mdast';
 
+type QueryParam = `${string}=${string}`;
+
 interface Options {
 	externalLinks?: boolean;
 	internalLinks?: boolean;
-	queryParam: string;
+	queryParam: QueryParam;
 }
 
 /**

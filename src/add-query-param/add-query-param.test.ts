@@ -8,6 +8,7 @@ describe('addQueryParam', () => {
 	describe('Validations', () => {
 		it('should throw an error if queryParam is not provided', async () => {
 			await expect(async () => {
+				// @ts-ignore - Testing invalid input
 				await remark().use(addQueryParam, { queryParam: '' }).process('');
 			}).rejects.toThrow('[remark-add-query-param] queryParam is required');
 		});
@@ -15,6 +16,7 @@ describe('addQueryParam', () => {
 		it('should throw an error if queryParam format is incorrect', async () => {
 			await expect(async () => {
 				await remark()
+					// @ts-ignore - Testing invalid input
 					.use(addQueryParam, { queryParam: 'invalidformat' })
 					.process('');
 			}).rejects.toThrow(
