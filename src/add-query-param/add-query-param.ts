@@ -1,19 +1,20 @@
 import { visit } from 'unist-util-visit';
 import type { Node } from 'unist';
 import type { Link } from 'mdast';
+import type { RemarkAddQueryParamOptions } from './types';
 
-type QueryParam = `${string}=${string}`;
-
-interface Options {
-	externalLinks?: boolean;
-	internalLinks?: boolean;
-	queryParam: QueryParam;
-}
+const validateQueryParam = (queryParam: string) => {
+	if (!queryParam.includes('=')) {
+		throw new Error(
+			`[remark-add-query-param] queryParam should be in the format key=value. Assertion failed for queryParam: ${queryParam}`,
+		);
+	}
+};
 
 /**
  * Add a query parameter to all links in the markdown
  * @param options Options for the plugin
- * @param options.queryParam The query parameter to add to the links. For example: 'ref=myawesomewebsite.com'
+ * @param options.queryParam The query parameter to add to the links. For example: 'ref=myawesomewebsite.com' or array of query parameters ['ref=myawesomewebsite.com', 'utm_source=twitter']
  * @param options.externalLinks Whether to add the query parameter to external links. Default is true
  * @param options.internalLinks Whether to add the query parameter to internal links. Default is true
  */
@@ -21,17 +22,17 @@ export default function addQueryParam({
 	queryParam,
 	externalLinks = true,
 	internalLinks = true,
-}: Options) {
+}: RemarkAddQueryParamOptions) {
 	if (!queryParam) {
 		throw new Error('[remark-add-query-param] queryParam is required');
 	}
 
-	const [queryParamKey, queryParamValue] = queryParam.split('=');
+	if (!Array.isArray(queryParam)) {
+		queryParam = [queryParam];
+	}
 
-	if (!queryParamKey || !queryParamValue) {
-		throw new Error(
-			'[remark-add-query-param] queryParam should be in the format key=value',
-		);
+	for (const param of queryParam) {
+		validateQueryParam(param);
 	}
 
 	return (tree: Node) => {
@@ -58,46 +59,60 @@ export default function addQueryParam({
 				if (isExternalUrl) {
 					const parsedUrl = new URL(node.url);
 
-					// If the URL already has a query parameter which matches the
-					// same query parameter key, skip it
-					if (parsedUrl.searchParams.get(queryParamKey)) {
-						return;
-					}
+					// Process for all query parameters
+					for (const queryP of queryParam) {
+						const [queryParamKey, queryParamValue] = queryP.split('=');
 
-					parsedUrl.searchParams.set(queryParamKey, queryParamValue);
+						// If the URL already has a query parameter which matches the
+						// same query parameter key, skip it
+						if (parsedUrl.searchParams.get(queryParamKey)) {
+							continue;
+						}
+
+						parsedUrl.searchParams.set(queryParamKey, queryParamValue);
+					}
 
 					node.url = parsedUrl.toString();
 				}
 
 				// Handling for internal links
 				if (isInternalUrl) {
-					// If the internal URL has a query parameter which matches the
-					// same query parameter key, skip it
-					if (node.url.includes(`${queryParamKey}=`)) {
-						return;
-					}
+					// Process for all query parameters
+					for (const queryP of queryParam) {
+						const [queryParamKey, queryParamValue] = queryP.split('=');
 
-					// If there are already some query parameters in the URL
-					// Then append the query parameter to the URL
-					if (node.url.includes('?')) {
-						if (node.url.includes('#')) {
-							// If the URL includes a hash, then add the query parameter before the hash
-							node.url = `${
-								node.url.split('#')[0]
-							}&${queryParamKey}=${queryParamValue}#${node.url.split('#')[1]}`;
-						} else {
-							// Otherwise just append the query parameter to the URL
-							node.url = `${node.url}&${queryParamKey}=${queryParamValue}`;
+						// If the internal URL has a query parameter which matches the
+						// same query parameter key, skip it
+						if (node.url.includes(`${queryParamKey}=`)) {
+							continue;
 						}
-					} else {
-						if (node.url.includes('#')) {
-							// If the URL includes a hash, then add the query parameter before the hash
-							node.url = `${
-								node.url.split('#')[0]
-							}?${queryParamKey}=${queryParamValue}#${node.url.split('#')[1]}`;
+
+						// If there are already some query parameters in the URL
+						// Then append the query parameter to the URL
+						if (node.url.includes('?')) {
+							if (node.url.includes('#')) {
+								// If the URL includes a hash, then add the query parameter before the hash
+								node.url = `${
+									node.url.split('#')[0]
+								}&${queryParamKey}=${queryParamValue}#${
+									node.url.split('#')[1]
+								}`;
+							} else {
+								// Otherwise just append the query parameter to the URL
+								node.url = `${node.url}&${queryParamKey}=${queryParamValue}`;
+							}
 						} else {
-							// Otherwise just add the query parameter to the URL
-							node.url = `${node.url}?${queryParamKey}=${queryParamValue}`;
+							if (node.url.includes('#')) {
+								// If the URL includes a hash, then add the query parameter before the hash
+								node.url = `${
+									node.url.split('#')[0]
+								}?${queryParamKey}=${queryParamValue}#${
+									node.url.split('#')[1]
+								}`;
+							} else {
+								// Otherwise just add the query parameter to the URL
+								node.url = `${node.url}?${queryParamKey}=${queryParamValue}`;
+							}
 						}
 					}
 				}
