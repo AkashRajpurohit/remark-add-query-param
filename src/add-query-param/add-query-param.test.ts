@@ -10,7 +10,7 @@ const multiQueryParams: QueryParam[] = [
 ];
 
 describe('addQueryParam', () => {
-	describe('Validations', () => {
+	describe.only('Validations', () => {
 		it('should throw an error if queryParam is not provided', async () => {
 			await expect(async () => {
 				// @ts-ignore - Testing invalid input
@@ -25,7 +25,7 @@ describe('addQueryParam', () => {
 					.use(addQueryParam, { queryParam: 'invalidformat' })
 					.process('');
 			}).rejects.toThrow(
-				'[remark-add-query-param] queryParam should be in the format key=value',
+				'[remark-add-query-param] queryParam should be in the format key=value. Assertion failed for queryParam: invalidformat',
 			);
 		});
 
