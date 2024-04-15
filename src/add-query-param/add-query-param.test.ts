@@ -10,7 +10,7 @@ const multiQueryParams: QueryParam[] = [
 ];
 
 describe('addQueryParam', () => {
-	describe.only('Validations', () => {
+	describe('Validations', () => {
 		it('should throw an error if queryParam is not provided', async () => {
 			await expect(async () => {
 				// @ts-ignore - Testing invalid input
