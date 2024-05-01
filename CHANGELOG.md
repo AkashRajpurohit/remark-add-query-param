@@ -1,5 +1,13 @@
 # remark-add-query-param
 
+## 1.2.1
+
+### Patch Changes
+
+- [`f55a25e`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/f55a25eaf814c0025896c857977d7a1970c8c0eb) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - perf: :rocket: simplify logic for external and internal links
+
+- [`0141bfb`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/0141bfbcf88a01bf2d4a652fc6de40ec2c7cf92b) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - build(deps): :arrow_up: upgrade dependencies
+
 ## 1.2.0
 
 ### Minor Changes
