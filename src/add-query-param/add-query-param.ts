@@ -55,56 +55,31 @@ export default function addQueryParam({
 					return;
 				}
 
-				// Handling for external links
+				let parsedUrl: URL;
+
 				if (isExternalUrl) {
-					const parsedUrl = new URL(node.url);
-
-					// Process for all query parameters
-					for (const queryP of queryParam) {
-						const [queryParamKey, queryParamValue] = queryP.split('=');
-
-						// If the URL already has a query parameter which matches the
-						// same query parameter key, skip it
-						if (parsedUrl.searchParams.get(queryParamKey)) {
-							continue;
-						}
-
-						parsedUrl.searchParams.set(queryParamKey, queryParamValue);
-					}
-
-					node.url = parsedUrl.toString();
+					parsedUrl = new URL(node.url);
+				} else {
+					parsedUrl = new URL(node.url, 'https://example.com');
 				}
 
-				// Handling for internal links
-				if (isInternalUrl) {
-					// Process for all query parameters
-					for (const queryP of queryParam) {
-						const [queryParamKey, queryParamValue] = queryP.split('=');
+				// Process for all query parameters
+				for (const queryP of queryParam) {
+					const [queryParamKey, queryParamValue] = queryP.split('=');
 
-						// If the internal URL has a query parameter which matches the
-						// same query parameter key, skip it
-						if (node.url.includes(`${queryParamKey}=`)) {
-							continue;
-						}
-
-						// If the URL already has some query parameters, then add the query parameter
-						// with the correct delimiter
-						const delimiter = node.url.includes('?') ? '&' : '?';
-
-						// If there are already some query parameters in the URL
-						// Then append the query parameter to the URL
-						if (node.url.includes('#')) {
-							// If the URL includes a hash, then add the query parameter before the hash
-							node.url = `${
-								node.url.split('#')[0]
-							}${delimiter}${queryParamKey}=${queryParamValue}#${
-								node.url.split('#')[1]
-							}`;
-						} else {
-							// Otherwise just add the query parameter to the URL
-							node.url = `${node.url}${delimiter}${queryParamKey}=${queryParamValue}`;
-						}
+					// If the URL already has a query parameter which matches the
+					// same query parameter key, skip it
+					if (parsedUrl.searchParams.get(queryParamKey)) {
+						continue;
 					}
+
+					parsedUrl.searchParams.set(queryParamKey, queryParamValue);
+				}
+
+				if (isExternalUrl) {
+					node.url = parsedUrl.toString();
+				} else {
+					node.url = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
 				}
 			}
 		});
