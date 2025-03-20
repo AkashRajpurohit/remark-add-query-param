@@ -43,7 +43,7 @@
   "scripts": {
     "build": "NODE_ENV=production tsup",
     "dev": "tsup --watch",
-    "format": "biome check --apply ./src",
+    "format": "biome check --write ./src",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
@@ -53,17 +53,17 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.2",
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
-    "@types/mdast": "^4.0.3",
-    "@types/node": "^20.12.7",
-    "@types/unist": "^3.0.2",
-    "@vitest/coverage-v8": "^1.5.3",
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.28.1",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^22.13.10",
+    "@types/unist": "^3.0.3",
+    "@vitest/coverage-v8": "^3.0.9",
     "remark": "^15.0.1",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.5.3"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   },
   "publishConfig": {
     "access": "public"

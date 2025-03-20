@@ -1,7 +1,7 @@
+import { remark } from 'remark';
 import { describe, expect, it } from 'vitest';
 import addQueryParam from './add-query-param';
 import type { QueryParam } from './types';
-import { remark } from 'remark';
 
 const queryParam: QueryParam = 'ref=myawesomewebsite.com';
 const multiQueryParams: QueryParam[] = [

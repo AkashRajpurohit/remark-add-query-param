@@ -1,6 +1,6 @@
-import { visit } from 'unist-util-visit';
-import type { Node } from 'unist';
 import type { Link } from 'mdast';
+import type { Node } from 'unist';
+import { visit } from 'unist-util-visit';
 import type { RemarkAddQueryParamOptions } from './types';
 
 const validateQueryParam = (queryParam: string) => {
