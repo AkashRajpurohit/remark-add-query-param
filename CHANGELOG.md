@@ -1,5 +1,11 @@
 # remark-add-query-param
 
+## 1.2.2
+
+### Patch Changes
+
+- [`85ac614`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/85ac61496819c2dc540d4a55ced5a88f50251d43) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - chore: :arrow_up: deps bumped up
+
 ## 1.2.1
 
 ### Patch Changes
