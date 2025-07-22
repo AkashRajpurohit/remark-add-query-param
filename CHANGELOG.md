@@ -1,5 +1,13 @@
 # remark-add-query-param
 
+## 1.3.0
+
+### Minor Changes
+
+- [`6c08a96`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/6c08a96f1dd39060b55bbbafa9d2b6c3c10788f2) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - fix: :bug: parse only HTTP links
+
+- [`66999e0`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/66999e050e2da5f1feea1c59eb717f60d373422f) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - build(deps): :arrow_up: deps upgraded
+
 ## 1.2.2
 
 ### Patch Changes
