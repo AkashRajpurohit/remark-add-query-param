@@ -4,11 +4,11 @@ import { visit } from 'unist-util-visit';
 import type { RemarkAddQueryParamOptions } from './types';
 
 const validateQueryParam = (queryParam: string) => {
-  if (!queryParam.includes('=')) {
-    throw new Error(
-      `[remark-add-query-param] queryParam should be in the format key=value. Assertion failed for queryParam: ${queryParam}`,
-    );
-  }
+	if (!queryParam.includes('=')) {
+		throw new Error(
+			`[remark-add-query-param] queryParam should be in the format key=value. Assertion failed for queryParam: ${queryParam}`,
+		);
+	}
 };
 
 /**
@@ -21,86 +21,86 @@ const validateQueryParam = (queryParam: string) => {
  * Note: Only HTTP/HTTPS URLs and relative URLs are processed. Other URL schemes like mailto:, tel:, ftp:, etc. are left unchanged.
  */
 export default function addQueryParam({
-  queryParam,
-  externalLinks = true,
-  internalLinks = true,
+	queryParam,
+	externalLinks = true,
+	internalLinks = true,
 }: RemarkAddQueryParamOptions) {
-  if (!queryParam) {
-    throw new Error('[remark-add-query-param] queryParam is required');
-  }
+	if (!queryParam) {
+		throw new Error('[remark-add-query-param] queryParam is required');
+	}
 
-  if (!Array.isArray(queryParam)) {
-    queryParam = [queryParam];
-  }
+	if (!Array.isArray(queryParam)) {
+		queryParam = [queryParam];
+	}
 
-  for (const param of queryParam) {
-    validateQueryParam(param);
-  }
+	for (const param of queryParam) {
+		validateQueryParam(param);
+	}
 
-  return (tree: Node) => {
-    visit(tree, 'link', (node: Link) => {
-      if (!node.url) {
-        return;
-      }
+	return (tree: Node) => {
+		visit(tree, 'link', (node: Link) => {
+			if (!node.url) {
+				return;
+			}
 
-      // Skip anchor links
-      if (node.url.startsWith('#')) {
-        return;
-      }
+			// Skip anchor links
+			if (node.url.startsWith('#')) {
+				return;
+			}
 
-      // Only process HTTP/HTTPS URLs and relative URLs
-      // Skip other schemes like mailto:, tel:, ftp:, etc.
-      const isHttpUrl =
-        node.url.startsWith('http://') || node.url.startsWith('https://');
-      const isRelativeUrl =
-        node.url.startsWith('/') ||
-        node.url.startsWith('./') ||
-        node.url.startsWith('../');
+			// Only process HTTP/HTTPS URLs and relative URLs
+			// Skip other schemes like mailto:, tel:, ftp:, etc.
+			const isHttpUrl =
+				node.url.startsWith('http://') || node.url.startsWith('https://');
+			const isRelativeUrl =
+				node.url.startsWith('/') ||
+				node.url.startsWith('./') ||
+				node.url.startsWith('../');
 
-      // Skip if it's not an HTTP URL or relative URL
-      if (!isHttpUrl && !isRelativeUrl) {
-        return;
-      }
+			// Skip if it's not an HTTP URL or relative URL
+			if (!isHttpUrl && !isRelativeUrl) {
+				return;
+			}
 
-      const isExternalUrl = isHttpUrl;
-      const isInternalUrl = isRelativeUrl;
+			const isExternalUrl = isHttpUrl;
+			const isInternalUrl = isRelativeUrl;
 
-      // If the URL is external and externalLinks is false, skip it
-      if (!externalLinks && isExternalUrl) {
-        return;
-      }
+			// If the URL is external and externalLinks is false, skip it
+			if (!externalLinks && isExternalUrl) {
+				return;
+			}
 
-      // If the URL is internal and internalLinks is false, skip it
-      if (!internalLinks && isInternalUrl) {
-        return;
-      }
+			// If the URL is internal and internalLinks is false, skip it
+			if (!internalLinks && isInternalUrl) {
+				return;
+			}
 
-      let parsedUrl: URL;
+			let parsedUrl: URL;
 
-      if (isExternalUrl) {
-        parsedUrl = new URL(node.url);
-      } else {
-        parsedUrl = new URL(node.url, 'https://example.com');
-      }
+			if (isExternalUrl) {
+				parsedUrl = new URL(node.url);
+			} else {
+				parsedUrl = new URL(node.url, 'https://example.com');
+			}
 
-      // Process for all query parameters
-      for (const queryP of queryParam) {
-        const [queryParamKey, queryParamValue] = queryP.split('=');
+			// Process for all query parameters
+			for (const queryP of queryParam) {
+				const [queryParamKey, queryParamValue] = queryP.split('=');
 
-        // If the URL already has a query parameter which matches the
-        // same query parameter key, skip it
-        if (parsedUrl.searchParams.get(queryParamKey)) {
-          continue;
-        }
+				// If the URL already has a query parameter which matches the
+				// same query parameter key, skip it
+				if (parsedUrl.searchParams.get(queryParamKey)) {
+					continue;
+				}
 
-        parsedUrl.searchParams.set(queryParamKey, queryParamValue);
-      }
+				parsedUrl.searchParams.set(queryParamKey, queryParamValue);
+			}
 
-      if (isExternalUrl) {
-        node.url = parsedUrl.toString();
-      } else {
-        node.url = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
-      }
-    });
-  };
+			if (isExternalUrl) {
+				node.url = parsedUrl.toString();
+			} else {
+				node.url = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+			}
+		});
+	};
 }
