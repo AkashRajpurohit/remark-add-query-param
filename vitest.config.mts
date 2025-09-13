@@ -13,7 +13,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html'],
-      exclude: ['dist', 'coverage', 'src/index.ts'],
+      exclude: [
+        'dist',
+        'coverage',
+        'src/index.ts',
+        'tsup.config.ts',
+        'vitest.config.mts',
+      ],
     },
   },
 });

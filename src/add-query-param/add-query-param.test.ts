@@ -312,6 +312,52 @@ describe('addQueryParam', () => {
     });
   });
 
+  describe('Edge Cases', () => {
+    it('should return the same content when markdown has no links', async () => {
+      const markdownContent = `
+# This is a heading
+
+This is a paragraph with **bold text** and *italic text*.
+
+* List item 1
+* List item 2
+
+\`\`\`javascript
+console.log('code block');
+\`\`\`
+       `;
+
+      const result = await remark()
+        .use(addQueryParam, {
+          externalQueryParams: externalQueryParam,
+          internalQueryParams: internalQueryParam,
+        })
+        .process(markdownContent);
+
+      expect(String(result).trim()).toEqual(markdownContent.trim());
+    });
+
+    it('should return the same content when markdown has links with no URLs', async () => {
+      const markdownContent = `
+# This is a heading
+
+This is a paragraph with [a link]() and [another link]().
+
+* [List link]()
+* [Another list link]()
+       `;
+
+      const result = await remark()
+        .use(addQueryParam, {
+          externalQueryParams: externalQueryParam,
+          internalQueryParams: internalQueryParam,
+        })
+        .process(markdownContent);
+
+      expect(String(result).trim()).toEqual(markdownContent.trim());
+    });
+  });
+
   describe('Non HTTP links', () => {
     it('should not add query parameter to mailto links', async () => {
       const result = await remark()
