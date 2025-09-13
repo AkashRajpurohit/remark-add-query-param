@@ -1,5 +1,17 @@
 # remark-add-query-param
 
+## 2.0.0
+
+### Major Changes
+
+- [`5ee4e85`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/5ee4e851609bba2face9a7df332325f190056f90) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :sparkles: simplify options with internal links query param and external links query param
+
+### Patch Changes
+
+- [`3a0f77e`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/3a0f77e6e6c5b9bec96044b854d307f55b028c06) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - build(deps): :arrow_up: upgrade deps
+
+- [`6227b71`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/6227b7159cdd060d23e7f3f942fec26fc38f9450) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :sparkles: 100% coverage
+
 ## 1.3.0
 
 ### Minor Changes
