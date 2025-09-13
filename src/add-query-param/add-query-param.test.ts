@@ -1,7 +1,7 @@
 import { remark } from 'remark';
 import { describe, expect, it } from 'vitest';
 import addQueryParam from './add-query-param';
-import type { QueryParam } from './types';
+import type { QueryParam, DynamicQueryParam } from './types';
 
 const externalQueryParam: QueryParam = 'ref=myawesomewebsite.com';
 const internalQueryParam: QueryParam = 'source=blog';
@@ -309,6 +309,110 @@ describe('addQueryParam', () => {
 			`.trim();
 
       expect(String(result).trim().replace(/\\/g, '')).toEqual(expected);
+    });
+  });
+
+  describe('Dynamic Parameters', () => {
+    it('should add dynamic parameters based on filename', async () => {
+      const dynamicParam: DynamicQueryParam = {
+        key: 'utm_medium',
+        dynamic: (context) => context.file.stem || 'unknown', // filename without extension
+      };
+
+      const result = await remark()
+        .use(addQueryParam, { externalQueryParams: dynamicParam })
+        .process('[Google](https://www.google.com/)');
+
+      // The VFile will have a default stem, let's check the structure
+      expect(String(result).trim().replace(/\\/g, '')).toMatch(
+        /\[Google\]\(https:\/\/www\.google\.com\/\?utm_medium=.+\)/,
+      );
+    });
+
+    it('should add dynamic parameters based on directory', async () => {
+      const dynamicParam: DynamicQueryParam = {
+        key: 'section',
+        dynamic: (context) => context.file.dirname || 'root',
+      };
+
+      const result = await remark()
+        .use(addQueryParam, { externalQueryParams: dynamicParam })
+        .process('[Google](https://www.google.com/)');
+
+      expect(String(result).trim().replace(/\\/g, '')).toMatch(
+        /\[Google\]\(https:\/\/www\.google\.com\/\?section=.+\)/,
+      );
+    });
+
+    it('should add dynamic parameters based on link URL', async () => {
+      const dynamicParam: DynamicQueryParam = {
+        key: 'target_domain',
+        dynamic: (context) => {
+          try {
+            return new URL(context.linkUrl).hostname;
+          } catch {
+            return 'unknown';
+          }
+        },
+      };
+
+      const result = await remark()
+        .use(addQueryParam, { externalQueryParams: dynamicParam })
+        .process('[Google](https://www.google.com/)');
+
+      expect(String(result).trim().replace(/\\/g, '')).toEqual(
+        '[Google](https://www.google.com/?target_domain=www.google.com)',
+      );
+    });
+
+    it('should handle mixed static and dynamic parameters', async () => {
+      const mixedParams: (QueryParam | DynamicQueryParam)[] = [
+        'utm_source=akashrajpurohit.com',
+        {
+          key: 'utm_medium',
+          dynamic: (context) => context.file.stem || 'unknown',
+        },
+      ];
+
+      const result = await remark()
+        .use(addQueryParam, { externalQueryParams: mixedParams })
+        .process('[Google](https://www.google.com/)');
+
+      expect(String(result).trim().replace(/\\/g, '')).toMatch(
+        /\[Google\]\(https:\/\/www\.google\.com\/\?utm_source=akashrajpurohit\.com&utm_medium=.+\)/,
+      );
+    });
+
+    it('should throw error when dynamic function throws', async () => {
+      const errorParam: DynamicQueryParam = {
+        key: 'error_param',
+        dynamic: () => {
+          throw new Error('Test error');
+        },
+      };
+
+      await expect(async () => {
+        await remark()
+          .use(addQueryParam, { externalQueryParams: errorParam })
+          .process('[Google](https://www.google.com/)');
+      }).rejects.toThrow(
+        '[remark-add-query-param] Error in dynamic parameter function for key "error_param": Test error',
+      );
+    });
+
+    it('should handle dynamic parameters for internal links', async () => {
+      const dynamicParam: DynamicQueryParam = {
+        key: 'page',
+        dynamic: (context) => context.file.stem || 'unknown',
+      };
+
+      const result = await remark()
+        .use(addQueryParam, { internalQueryParams: dynamicParam })
+        .process('[Home](/)');
+
+      expect(String(result).trim().replace(/\\/g, '')).toMatch(
+        /\[Home\]\(\/\?page=.+\)/,
+      );
     });
   });
 

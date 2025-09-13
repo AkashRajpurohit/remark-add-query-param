@@ -1,7 +1,12 @@
 import type { Link } from 'mdast';
 import type { Node } from 'unist';
 import { visit } from 'unist-util-visit';
-import type { RemarkAddQueryParamOptions } from './types';
+import type { VFile } from 'vfile';
+import type {
+  RemarkAddQueryParamOptions,
+  DynamicContext,
+  QueryParamOrDynamic,
+} from './types';
 
 const validateQueryParam = (queryParam: string) => {
   if (!queryParam.includes('=')) {
@@ -33,8 +38,16 @@ const validateQueryParam = (queryParam: string) => {
 /**
  * Add query parameters to HTTP/HTTPS and relative links in the markdown
  * @param options Options for the plugin
- * @param options.externalQueryParams Query parameters to add to external links (HTTP/HTTPS URLs). For example: 'ref=myawesomewebsite.com' or array of query parameters ['ref=myawesomewebsite.com', 'utm_source=twitter']
- * @param options.internalQueryParams Query parameters to add to internal links (relative URLs). For example: 'ref=myawesomewebsite.com' or array of query parameters ['ref=myawesomewebsite.com', 'utm_source=twitter']
+ * @param options.externalQueryParams Query parameters to add to external links (HTTP/HTTPS URLs). Can be static strings like 'ref=myawesomewebsite.com' or dynamic objects with functions that receive file context.
+ * @param options.internalQueryParams Query parameters to add to internal links (relative URLs). Can be static strings like 'ref=myawesomewebsite.com' or dynamic objects with functions that receive file context.
+ *
+ * Dynamic parameters example:
+ * ```javascript
+ * {
+ *   key: 'utm_medium',
+ *   dynamic: (context) => context.file.stem // Returns filename without extension
+ * }
+ * ```
  *
  * Note: Only HTTP/HTTPS URLs and relative URLs are processed. Other URL schemes like mailto:, tel:, ftp:, etc. are left unchanged.
  */
@@ -59,11 +72,38 @@ export default function addQueryParam({
       : [internalQueryParamsOption]
     : [];
 
+  // Helper function to process dynamic parameters
+  const processDynamicParams = (
+    params: QueryParamOrDynamic[],
+    context: DynamicContext,
+  ): string[] => {
+    return params.map((param) => {
+      if (typeof param === 'string') {
+        return param;
+      } else {
+        // Dynamic parameter
+        try {
+          const value = param.dynamic(context);
+          return `${param.key}=${value}`;
+        } catch (error) {
+          throw new Error(
+            `[remark-add-query-param] Error in dynamic parameter function for key "${
+              param.key
+            }": ${error instanceof Error ? error.message : String(error)}`,
+          );
+        }
+      }
+    });
+  };
+
+  // Validate static parameters only (dynamic ones will be validated when processed)
   for (const param of [...externalQueryParams, ...internalQueryParams]) {
-    validateQueryParam(param);
+    if (typeof param === 'string') {
+      validateQueryParam(param);
+    }
   }
 
-  return (tree: Node) => {
+  return (tree: Node, file: VFile) => {
     visit(tree, 'link', (node: Link) => {
       if (!node.url) {
         return;
@@ -91,11 +131,18 @@ export default function addQueryParam({
       const isExternalUrl = isHttpUrl;
       const isInternalUrl = isRelativeUrl;
 
+      // Create context for dynamic parameters
+      const context: DynamicContext = {
+        file,
+        linkUrl: node.url,
+        linkTitle: node.title || undefined,
+      };
+
       let queryParamsToUse: string[] = [];
       if (isExternalUrl && externalQueryParams.length > 0) {
-        queryParamsToUse = externalQueryParams;
+        queryParamsToUse = processDynamicParams(externalQueryParams, context);
       } else if (isInternalUrl && internalQueryParams.length > 0) {
-        queryParamsToUse = internalQueryParams;
+        queryParamsToUse = processDynamicParams(internalQueryParams, context);
       } else {
         // Skip if no query parameters are configured for this URL type
         return;

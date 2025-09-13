@@ -101,6 +101,76 @@ const processor = remark().use(addQueryParam, {
 });
 ```
 
+### Dynamic Parameters 🚀
+
+You can also use **dynamic parameters** that are calculated based on the current file being processed. This is perfect for tracking which specific pages are generating traffic:
+
+```javascript
+import { remark } from 'remark';
+import addQueryParam from 'remark-add-query-param';
+
+const processor = remark().use(addQueryParam, {
+  externalQueryParams: [
+    'utm_source=akashrajpurohit.com',
+    {
+      key: 'utm_medium',
+      dynamic: (context) => context.file.stem, // Returns filename without extension
+    },
+  ],
+});
+
+// For a file named "my-first-blog.mdx", this will add:
+// utm_source=akashrajpurohit.com&utm_medium=my-first-blog
+```
+
+The dynamic function receives a context object with:
+- `context.file` - The VFile object with file metadata
+- `context.linkUrl` - The URL of the link being processed
+- `context.linkTitle` - The title of the link (if present)
+
+**Common VFile properties you can use:**
+- `context.file.stem` - Filename without extension (e.g., `my-first-blog`)
+- `context.file.basename` - Full filename (e.g., `my-first-blog.mdx`)
+- `context.file.dirname` - Directory path (e.g., `blog`)
+- `context.file.path` - Full file path
+
+**More dynamic parameter examples:**
+
+```javascript
+// Track by directory/section
+{
+  key: 'section',
+  dynamic: (context) => context.file.dirname || 'root'
+}
+
+// Track target domain for external links
+{
+  key: 'target_domain',
+  dynamic: (context) => {
+    try {
+      return new URL(context.linkUrl).hostname;
+    } catch {
+      return 'unknown';
+    }
+  }
+}
+
+// Custom slug generation
+{
+  key: 'post_id',
+  dynamic: (context) => context.file.stem.replace(/-/g, '_')
+}
+
+// Date-based tracking (if filename contains date)
+{
+  key: 'published',
+  dynamic: (context) => {
+    const match = context.file.basename.match(/^(\d{4}-\d{2}-\d{2})/);
+    return match ? match[1] : 'unknown';
+  }
+}
+```
+
 ### Why Different Parameters for Different Link Types? 🎯
 
 One of the key advantages of the new API is that you can now specify **different query parameters for internal and external links**. This is particularly useful for:
@@ -113,7 +183,7 @@ This allows you to get more granular analytics and better understand how users n
 To ensure the typescript is happy, you can import the types from the package like this:
 
 ```typescript
-import type { QueryParam, RemarkAddQueryParamOptions } from 'remark-add-query-param';
+import type { QueryParam, RemarkAddQueryParamOptions, DynamicQueryParam } from 'remark-add-query-param';
 
 const options: RemarkAddQueryParamOptions = {
   externalQueryParams: 'utm_source=remark-add-query-param' as QueryParam,
@@ -124,6 +194,17 @@ const options: RemarkAddQueryParamOptions = {
 const options: RemarkAddQueryParamOptions = {
   externalQueryParams: ['utm_source=remark-add-query-param', 'utm_medium=markdown'] as QueryParam[],
   internalQueryParams: ['source=blog', 'campaign=internal'] as QueryParam[],
+};
+
+// Or with dynamic parameters
+const dynamicOptions: RemarkAddQueryParamOptions = {
+  externalQueryParams: [
+    'utm_source=akashrajpurohit.com',
+    {
+      key: 'utm_medium',
+      dynamic: (context) => context.file.stem,
+    } as DynamicQueryParam,
+  ],
 };
 ```
 
@@ -187,10 +268,10 @@ export default withMDX(nextConfig);
 
 You can pass the following options to the plugin:
 
-| Option                  | Type                           | Description                                                                                                                     |
-| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| **externalQueryParams** | `QueryParam` or `QueryParam[]` | Query parameters to add to external links (HTTP/HTTPS URLs). Should be valid query parameter strings i.e `key=value`. Optional. |
-| **internalQueryParams** | `QueryParam` or `QueryParam[]` | Query parameters to add to internal links (relative URLs). Should be valid query parameter strings i.e `key=value`. Optional.   |
+| Option                  | Type                                             | Description                                                                                                                                   |
+| ----------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **externalQueryParams** | `QueryParamOrDynamic` or `QueryParamOrDynamic[]` | Query parameters to add to external links (HTTP/HTTPS URLs). Can be static strings (`key=value`) or dynamic objects with functions. Optional. |
+| **internalQueryParams** | `QueryParamOrDynamic` or `QueryParamOrDynamic[]` | Query parameters to add to internal links (relative URLs). Can be static strings (`key=value`) or dynamic objects with functions. Optional.   |
 
 **Note:** At least one of `externalQueryParams` or `internalQueryParams` must be provided.
 
