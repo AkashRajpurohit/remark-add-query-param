@@ -1,5 +1,11 @@
 # remark-add-query-param
 
+## 2.1.0
+
+### Minor Changes
+
+- [`b96d227`](https://github.com/AkashRajpurohit/remark-add-query-param/commit/b96d227d0b203925f441048b90edf5b4451c66d5) Thanks [@AkashRajpurohit](https://github.com/AkashRajpurohit)! - feat: :sparkles: dynamic query parameter
+
 ## 2.0.0
 
 ### Major Changes
