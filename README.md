@@ -62,9 +62,8 @@ import { remark } from 'remark';
 import addQueryParam from 'remark-add-query-param';
 
 const processor = remark().use(addQueryParam, {
-  queryParam: 'utm_source=remark-add-query-param',
-  externalLinks: true,
-  internalLinks: true,
+  externalQueryParams: 'utm_source=remark-add-query-param',
+  internalQueryParams: 'source=blog',
 });
 
 processor.process('This is a [link](https://example.com)').then((file) => {
@@ -72,16 +71,15 @@ processor.process('This is a [link](https://example.com)').then((file) => {
 });
 ```
 
-The plugin also support using multiple query parameters like this:
+The plugin also supports using multiple query parameters like this:
 
 ```javascript
 import { remark } from 'remark';
 import addQueryParam from 'remark-add-query-param';
 
 const processor = remark().use(addQueryParam, {
-  queryParam: ['utm_source=remark-add-query-param', 'utm_medium=markdown'],
-  externalLinks: true,
-  internalLinks: true,
+  externalQueryParams: ['utm_source=remark-add-query-param', 'utm_medium=markdown'],
+  internalQueryParams: ['source=blog', 'campaign=internal'],
 });
 
 processor.process('This is a [link](https://example.com)').then((file) => {
@@ -89,22 +87,43 @@ processor.process('This is a [link](https://example.com)').then((file) => {
 });
 ```
 
+You can also add query parameters to only one type of link:
+
+```javascript
+// Only add to external links
+const processor = remark().use(addQueryParam, {
+  externalQueryParams: 'utm_source=remark-add-query-param',
+});
+
+// Only add to internal links  
+const processor = remark().use(addQueryParam, {
+  internalQueryParams: 'source=blog',
+});
+```
+
+### Why Different Parameters for Different Link Types? 🎯
+
+One of the key advantages of the new API is that you can now specify **different query parameters for internal and external links**. This is particularly useful for:
+
+- **External Links**: Track traffic sources with UTM parameters (`utm_source=blog`, `utm_medium=markdown`)
+- **Internal Links**: Track internal navigation with custom parameters (`source=blog`, `section=header`)
+
+This allows you to get more granular analytics and better understand how users navigate through your content vs. where they go when they leave your site.
+
 To ensure the typescript is happy, you can import the types from the package like this:
 
 ```typescript
 import type { QueryParam, RemarkAddQueryParamOptions } from 'remark-add-query-param';
 
 const options: RemarkAddQueryParamOptions = {
-  queryParam: 'utm_source=remark-add-query-param' as QueryParam,
-  externalLinks: true,
-  internalLinks: true,
+  externalQueryParams: 'utm_source=remark-add-query-param' as QueryParam,
+  internalQueryParams: 'source=blog' as QueryParam,
 };
 
 // Or for multiple query parameters
 const options: RemarkAddQueryParamOptions = {
-  queryParam: ['utm_source=remark-add-query-param', 'utm_medium=markdown'] as QueryParam[],
-  externalLinks: true,
-  internalLinks: true,
+  externalQueryParams: ['utm_source=remark-add-query-param', 'utm_medium=markdown'] as QueryParam[],
+  internalQueryParams: ['source=blog', 'campaign=internal'] as QueryParam[],
 };
 ```
 
@@ -123,9 +142,8 @@ export default defineConfig({
         [
           addQueryParam,
           {
-            queryParam: 'utm_source=remark-add-query-param',
-            externalLinks: true,
-            internalLinks: true,
+            externalQueryParams: 'utm_source=remark-add-query-param',
+            internalQueryParams: 'source=blog',
           },
         ],
       ],
@@ -154,9 +172,8 @@ const withMDX = require('@next/mdx')({
       [
         addQueryParam,
         {
-          queryParam: 'utm_source=remark-add-query-param',
-          externalLinks: true,
-          internalLinks: true,
+          externalQueryParams: 'utm_source=remark-add-query-param',
+          internalQueryParams: 'source=blog',
         },
       ],
     ],
@@ -170,11 +187,49 @@ export default withMDX(nextConfig);
 
 You can pass the following options to the plugin:
 
-| Option            | Type                           | Description                                                                                                                                                    |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **queryParam**    | `QueryParam` or `QueryParam[]` | The query parameter to add to the links. This is required and should be a valid query parameter string i.e `key=value`.                                        |
-| **externalLinks** | `boolean`                      | If set to `false`, the plugin will not add the query parameter to external links. Default is `true` i.e it will add the query parameter to all external links. |
-| **internalLinks** | `boolean`                      | If set to `false`, the plugin will not add the query parameter to internal links. Default is `true` i.e it will add the query parameter to all internal links. |
+| Option                  | Type                           | Description                                                                                                                     |
+| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| **externalQueryParams** | `QueryParam` or `QueryParam[]` | Query parameters to add to external links (HTTP/HTTPS URLs). Should be valid query parameter strings i.e `key=value`. Optional. |
+| **internalQueryParams** | `QueryParam` or `QueryParam[]` | Query parameters to add to internal links (relative URLs). Should be valid query parameter strings i.e `key=value`. Optional.   |
+
+**Note:** At least one of `externalQueryParams` or `internalQueryParams` must be provided.
+
+### Link Types
+
+- **External Links**: HTTP/HTTPS URLs (e.g., `https://example.com`, `http://example.com`)
+- **Internal Links**: Relative URLs (e.g., `/about`, `./page`, `../other-page`)
+
+The plugin will automatically detect the link type and apply the appropriate query parameters.
+
+## Migration from v1.x to v2.x 🚀
+
+Version 2.0.0 introduces a breaking change with a new, more intuitive API. Here's how to migrate:
+
+### Before (v1.x)
+```javascript
+// Old API
+addQueryParam({
+  queryParam: 'utm_source=mywebsite',
+  externalLinks: true,
+  internalLinks: true,
+});
+```
+
+### After (v2.x)
+```javascript
+// New API - much clearer!
+addQueryParam({
+  externalQueryParams: 'utm_source=mywebsite',
+  internalQueryParams: 'source=blog',
+});
+```
+
+### Key Changes:
+- `queryParam` → `externalQueryParams` and `internalQueryParams`
+- `externalLinks: boolean` → `externalQueryParams: string | string[]`
+- `internalLinks: boolean` → `internalQueryParams: string | string[]`
+- You can now specify different query parameters for external vs internal links
+- At least one of the two options must be provided
 
 ## Contributing 🫱🏻‍🫲🏼
 
@@ -186,7 +241,7 @@ If you encounter any problems feel free to open an [issue](https://github.com/Ak
 
 ## Where to find me? 👀
 
-[![Website Badge](https://img.shields.io/badge/-akashrajpurohit.com-3b5998?logo=google-chrome&logoColor=white)](https://akashrajpurohit.com/)
+[![Website Badge](https://img.shields.io/badge/-akashrajpurohit.com-3b5998?logo=google-chrome&logoColor=white)](https://akashrajpurohit.com/?utm_source=github&utm_medium=remark-add-query-param)
 [![Twitter Badge](https://img.shields.io/badge/-@akashwhocodes-00acee?logo=Twitter&logoColor=white)](https://twitter.com/AkashWhoCodes)
 [![Linkedin Badge](https://img.shields.io/badge/-@AkashRajpurohit-0e76a8?logo=Linkedin&logoColor=white)](https://linkedin.com/in/AkashRajpurohit)
 [![Instagram Badge](https://img.shields.io/badge/-@akashwho.codes-e4405f?logo=Instagram&logoColor=white)](https://instagram.com/akashwho.codes/)

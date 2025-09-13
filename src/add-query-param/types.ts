@@ -1,7 +1,12 @@
 export type QueryParam = `${string}=${string}`;
 
 export interface RemarkAddQueryParamOptions {
-	externalLinks?: boolean;
-	internalLinks?: boolean;
-	queryParam: QueryParam | QueryParam[];
+	/**
+	 * Query parameters to add to external links (HTTP/HTTPS URLs)
+	 */
+	externalQueryParams?: QueryParam | QueryParam[];
+	/**
+	 * Query parameters to add to internal links (relative URLs)
+	 */
+	internalQueryParams?: QueryParam | QueryParam[];
 }
